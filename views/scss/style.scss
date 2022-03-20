@@ -1,0 +1,30 @@
+@import './partials/_variables.scss';
+
+body {
+	position: relative;
+	font: $body-font;
+	width: $body-width;
+	margin: 0 auto;
+	padding: 16px;
+	box-sizing: border-box;
+}
+a {
+	color: #00B7FF;
+}
+
+form {
+	display: flex;
+	flex-wrap: wrap;
+
+	div {
+		flex: 50%;
+		margin-bottom: 12px;
+	}
+	input[type='submit'] {
+		cursor: pointer;
+	}
+	button {
+		cursor: pointer;
+	}
+}
+

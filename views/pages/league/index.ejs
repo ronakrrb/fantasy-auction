@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Your are in league <%= result.league_code %></p>
+    <% if(result.tournaments) { %>
+      <form action="/league/choose-tournament" method="post">
+        Select the tournament
+        <select name="tournament">
+          <option value="">----------</option>
+          <% for(var i=0; i<result.tournaments.length; i++) { %>
+            <option value="<%= result.tournaments[i].id %>"><%= result.tournaments[i].name %></option>
+          <% } %>
+        </select>
+        <input type="submit" name="Submit">
+      </form>
+    <% } %>
+    <script>console.log(<%- JSON.stringify(result) %>)</script>
+  </body>
+</html>

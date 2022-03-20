@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/competitors.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <% if(result) { %>
+      <p>Your are in league <%= result.league_code %></p>
+      <div class="competitorsPurse">
+        <% Object.keys(result.competitors).forEach(function (key) { %>
+          <div class="item" data-name="<%= key %>">
+            <div class="name"><%= key %></div>
+            <div class="amount"><%= result.competitors[key].remaining_purse %></div>
+          </div>
+        <% }); %>
+      </div>
+      <div class="competitorTeam inactive">
+        <button class="back">Back</button>
+        <div class="container"></div>
+      </div>
+    <% } %>
+    <%- include('../partials/_bottom-menu') %>
+    <script src="/javascripts/competitors.js"></script>
+    <script>
+      FantasyAuction.initCompetitors(<%- JSON.stringify(result) %>);
+    </script>
+  </body>
+</html>

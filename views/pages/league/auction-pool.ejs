@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/auction-pool.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Your are in league <%= result.league_code %></p>
+    <div class="container">
+      <% if(result.teams) { %>
+        <div><h3>Teams</h3></div>
+        <div class="entities">
+          <div class="entityName"><strong>Name</strong></div>
+          <div class="basePrice"><strong>Base</strong></div>
+          <div class="bidStatus"><strong>Status</strong></div>
+          <div class="bidAmount"><strong>Sold at</strong></div>
+        </div>
+        <% for(var i=0; i<result.teams.length; i++) { %>
+          <div class="entities <%= result.teams[i].bid_status==='Sold' ? 'sold' : '' %>">
+            <div class="entityName"><%= result.teams[i].name %></div>
+            <div class="basePrice"><%= result.teams[i].base_price %></div>
+            <div class="bidStatus"><%= result.teams[i].bid_status %></div>
+            <div class="bidAmount"><%= result.teams[i].bid_amount %></div>
+          </div>
+        <% } %>
+      <% } %>
+      <% if(result.players) { %>
+        <div><h3>Players</h3></div>
+        <% for(var i=0; i<result.players.length; i++) { %>
+          <div class="entities">
+            <div class="entityName"><%= result.players[i].name %></div>
+            <div class="basePrice"><%= result.players[i].base_price %></div>
+            <div class="bidStatus"><%= result.players[i].bid_status %></div>
+            <div class="bidAmount"><%= result.players[i].bid_amount %></div>
+          </div>
+        <% } %>
+      <% } %>
+    </div>
+    <%- include('../partials/_bottom-menu') %>
+    <script>console.log(<%- JSON.stringify(result) %>)</script>
+  </body>
+</html>

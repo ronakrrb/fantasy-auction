@@ -1,0 +1,56 @@
+@import '../partials/_variables.scss';
+
+.competitorsPurse {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	.item {
+		flex: 50%;
+		width: 50%;
+		padding: 12px;
+		box-sizing: border-box;
+		border: $border;
+		text-overflow: ellipsis;
+
+		.name {
+			text-align: center;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		.amount {
+			text-align: center;
+			font-weight: 600;
+		}
+	}
+}
+
+.competitorTeam {
+	.biddingEntity {
+		h4 {
+			margin-top: 24px;
+		}
+		.ownedTeam, .teamPlayers {
+			display: flex;
+			padding: 12px;
+			box-sizing: border-box;
+			border-bottom: $border;
+			width: 100%;
+			font-size: 14px;
+
+			.entityName {
+				width: calc($body-width - 120px);
+			}
+			.entityCategory {
+				width: 60px;
+			}
+			.entityPrice {
+				width: 60px;
+			}
+		}
+	}
+}
+
+.inactive {
+	display: none;
+}

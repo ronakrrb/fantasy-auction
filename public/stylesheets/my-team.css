@@ -1,0 +1,23 @@
+.biddingEntity {
+  overflow-y: scroll;
+}
+.biddingEntity h4 {
+  margin-top: 24px;
+}
+.biddingEntity .ownedTeam, .biddingEntity .teamPlayers {
+  display: flex;
+  padding: 12px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #cccccc;
+  width: 100%;
+  font-size: 14px;
+}
+.biddingEntity .ownedTeam .entityName, .biddingEntity .teamPlayers .entityName {
+  width: 240px;
+}
+.biddingEntity .ownedTeam .entityCategory, .biddingEntity .teamPlayers .entityCategory {
+  width: 60px;
+}
+.biddingEntity .ownedTeam .entityPrice, .biddingEntity .teamPlayers .entityPrice {
+  width: 60px;
+}

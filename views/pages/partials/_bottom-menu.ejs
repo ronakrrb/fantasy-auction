@@ -1,0 +1,16 @@
+<link rel='stylesheet' href='/stylesheets/bottom-menu.css' />
+<div class="menu-items">
+    <div class="item" id="bidding" data-route="bidding">Bid</div>
+    <div class="item" id="my_team" data-route="bidding/my-team">My Team & Purse</div>
+    <div class="item" id="competitors" data-route="bidding/competitors">Competitors</div>
+    <div class="item" id="auction_pool" data-route="bidding/auction-pool">Auction Pool</div>
+</div>
+<script>
+    let page = <%- JSON.stringify(page) %>;
+    Array.from(document.getElementsByClassName('item')).forEach(function (element) {
+        element.onclick = () => window.open(`/${element.dataset.route}`, '_self');
+        if (element.id === page) {
+            element.classList.add('active')
+        }
+    });
+</script>

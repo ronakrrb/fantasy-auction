@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/configure.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Configure your league <%= result.league_code %></p>
+    <form action="/league/set-configurations" method="post">
+      <div class="entities">
+        <div class="entityName">Selling process *</div>
+        <div>
+          <select name="config-selling_process">
+            <option value="1">Sell automatically after specified duration to the last bidder</option>
+            <option value="2">Manually sell the player by the auction host</option>
+          </select>
+        </div>
+      </div>
+      <div class="entities">
+        <div class="entityName">Maximum Hold Time <br/>(in seconds)</div><div><input type="number" name="config-max_hold_time" value="0" /> <br/>(Keep zero for unlimited time)</div>
+      </div>
+      <div class="entities">
+        <div class="entityName">Bid Increments *</div><div><input type="number" name="config-bid_increments" /></div>
+      </div>
+      <input type="submit" name="Submit">
+    </form>
+    <script>console.log(<%- JSON.stringify(result) %>)</script>
+  </body>
+</html>

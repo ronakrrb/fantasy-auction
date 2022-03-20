@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/my-team.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <% if(result) { %>
+      <p>Your are in league <%= result.league_code %></p>
+      <h2 class="remainingPurse">Remaining in your purse is <%= result.remaining_purse %></h2>
+      <div class="biddingEntity">
+        <% if(result.team && result.team.name) { %>
+          <h4>Your Team</h4>
+          <div class="ownedTeam">
+            <div class="entityName"><%= result.team.name %></div>
+            <div class="entityPrice"><%= result.team.bid_amount %></div>
+          </div>
+        <% } %>
+        <% if(result.players && result.players.length) { %>
+          <h4>Team Players</h4>
+          <% for(var i=0; i<result.players.length; i++) { %>
+            <div class="teamPlayers">
+              <div class="entityName"><%= result.players[i].name %></div>
+              <div class="entityCategory"><%= result.players[i].category.substring(0,3) %></div>
+              <div class="entityPrice"><%= result.players[i].bid_amount %></div>
+            </div>
+          <% } %>
+        <% } %>
+      </div>
+    <% } %>
+    <%- include('../partials/_bottom-menu') %>
+    <!-- <script src="/javascripts/my-team.js"></script> -->
+    <script>
+      console.log(<%- JSON.stringify(result) %>);
+    </script>
+  </body>
+</html>

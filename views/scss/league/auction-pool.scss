@@ -1,0 +1,35 @@
+@import '../partials/_variables.scss';
+
+.container {
+	// height: calc(90vh - 206px);
+	overflow-y: scroll;
+
+	h3 {
+		margin-top: 24px;
+	}
+
+	.entities {
+		display: flex;
+		padding: 12px;
+		box-sizing: border-box;
+		border-bottom: $border;
+		width: 100%;
+		.entityName {
+			width: calc($body-width - 180px);
+		}
+		.basePrice {
+			width: 60px;
+		}
+		.bidStatus {
+			width: 60px;
+		}
+		.bidAmount {
+			width: 60px;
+		}
+		&.sold {
+			background-color: #efefef;
+			color: #999999;
+		}
+	}
+
+}

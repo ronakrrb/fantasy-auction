@@ -1,0 +1,13 @@
+@import '../partials/_variables.scss';
+
+.entities {
+    display: flex;
+    padding: 12px;
+    box-sizing: border-box;
+    border-bottom: $border;
+    width: 100%;
+}
+
+.entityName {
+    width: calc($body-width * 0.625);
+}

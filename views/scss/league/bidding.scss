@@ -1,0 +1,83 @@
+@import '../partials/_variables.scss';
+
+.container {
+	height: calc(80vh - 206px);
+	.fetch_entity {
+		width: 100%;
+	}
+	.sell_unsold {
+		width: 100%;
+	}
+	.entityProfile {
+		display: flex;
+		border-bottom: $border;
+		width: 100%;
+		padding: 8px;
+		box-sizing: border-box;
+		.entityName {
+			width: 70%;
+		}
+		.entityBasePrice {
+			width: 30%;
+			text-align: right;
+		}
+	}
+	.bidAmount {
+		width: 100%;
+		font-size: 36px;
+		line-height: 48px;
+		font-weight: 800;
+		text-align: center;
+		margin: 32px 0px;
+	}
+	.entityCurrentBid {
+		width: 100%;
+		border-bottom: $border;
+		display: flex;
+		justify-content: space-between;
+		padding: 8px;
+		box-sizing: border-box;
+		.bidder {
+			width: 49%;
+		}
+		.bidStatus {
+			width: 49%;
+			text-align: right;
+		}
+	}
+
+	#bid {
+		position: absolute;
+		width: 150px;
+		height: 40px;
+		left: calc(50% - 75px);
+		bottom: 0;
+		font-size: 16px;
+		color: black;
+		background-color: rgba(255, 196, 0, 0.5);
+		border-radius: 20px;
+		border: 1px solid rgba(255, 196, 0);
+		transition: all .3s;
+		box-shadow: 6px 6px 12px #c5c5c5,
+					-6px -6px 12px #ffffff;
+	}
+
+	.purseDetails {
+		display: flex;
+		position: absolute;
+		left: 0;
+		bottom: 70px;
+		width: 100%;
+		justify-content: space-between;
+		div {
+			width: 49%;
+		}
+		.livePurse {
+			text-align: right;
+		}
+	}
+
+	.hideButton {
+		display: none;
+	}
+}

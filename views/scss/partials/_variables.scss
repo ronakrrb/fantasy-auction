@@ -1,0 +1,29 @@
+$body-width: 360px;
+$body-font: 14px/18px Helvetica, Arial, sans-serif;
+$border: 1px solid #cccccc;
+$boder-color: #cccccc;
+
+@media screen and (min-width: 420px) {
+  $body-width: 420px;
+}
+
+@media screen and (min-width: 480px) {
+  $body-width: 480px;
+  $body-font: 16px/18px Helvetica, Arial, sans-serif;
+}
+
+@media screen and (min-width: 540px) {
+  $body-width: 540px;
+}
+
+@media screen and (min-width: 600px) {
+  $body-width: 600px;
+}
+
+@media screen and (min-width: 660px) {
+  $body-width: 660px;
+}
+
+@media screen and (min-width: 720px) {
+  $body-width: 720px;
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <h3>Signup</h3>
+    <form action="/signup" method="post" id="signup">
+      <div>Your Team Name</div>
+      <div><input type="text" name="nick_name" /></div>
+      <div>Email Id</div>
+      <div><input type="email" name="email" /></div>
+      <div>Password</div>
+      <div><input type="password" name="password" id="password" /></div>
+      <div>Confirm Password</div>
+      <div><input type="password" name="confirm_password" id="confirm_password" /></div>
+      <div><input type="submit" name="Submit" /></div>
+    </form>
+
+    <h3>Login</h3>
+    <form action="/login" method="post">
+      <div>Email Id</div>
+      <div><input type="email" name="email" /></div>
+      <div>Password</div>
+      <div><input type="password" name="password" /></div>
+      <div><input type="submit" name="Submit" /></div>
+    </form>
+    <script src="/javascripts/index.js"></script>
+    <script>
+      FantasyAuction.init();
+    </script>
+  </body>
+</html>

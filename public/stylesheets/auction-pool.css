@@ -1,0 +1,29 @@
+.container {
+  overflow-y: scroll;
+}
+.container h3 {
+  margin-top: 24px;
+}
+.container .entities {
+  display: flex;
+  padding: 12px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #cccccc;
+  width: 100%;
+}
+.container .entities .entityName {
+  width: 180px;
+}
+.container .entities .basePrice {
+  width: 60px;
+}
+.container .entities .bidStatus {
+  width: 60px;
+}
+.container .entities .bidAmount {
+  width: 60px;
+}
+.container .entities.sold {
+  background-color: #efefef;
+  color: #999999;
+}

@@ -1,0 +1,48 @@
+.competitorsPurse {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.competitorsPurse .item {
+  flex: 50%;
+  width: 50%;
+  padding: 12px;
+  box-sizing: border-box;
+  border: 1px solid #cccccc;
+  text-overflow: ellipsis;
+}
+.competitorsPurse .item .name {
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.competitorsPurse .item .amount {
+  text-align: center;
+  font-weight: 600;
+}
+
+.competitorTeam .biddingEntity h4 {
+  margin-top: 24px;
+}
+.competitorTeam .biddingEntity .ownedTeam, .competitorTeam .biddingEntity .teamPlayers {
+  display: flex;
+  padding: 12px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #cccccc;
+  width: 100%;
+  font-size: 14px;
+}
+.competitorTeam .biddingEntity .ownedTeam .entityName, .competitorTeam .biddingEntity .teamPlayers .entityName {
+  width: 240px;
+}
+.competitorTeam .biddingEntity .ownedTeam .entityCategory, .competitorTeam .biddingEntity .teamPlayers .entityCategory {
+  width: 60px;
+}
+.competitorTeam .biddingEntity .ownedTeam .entityPrice, .competitorTeam .biddingEntity .teamPlayers .entityPrice {
+  width: 60px;
+}
+
+.inactive {
+  display: none;
+}

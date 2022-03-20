@@ -1,0 +1,28 @@
+@import '../partials/_variables.scss';
+
+.biddingEntity {
+	// height: calc(100vh - 236px);
+	overflow-y: scroll;
+
+	h4 {
+		margin-top: 24px;
+	}
+	.ownedTeam, .teamPlayers {
+		display: flex;
+		padding: 12px;
+		box-sizing: border-box;
+		border-bottom: $border;
+		width: 100%;
+		font-size: 14px;
+
+		.entityName {
+			width: calc($body-width - 120px);
+		}
+		.entityCategory {
+			width: 60px;
+		}
+		.entityPrice {
+			width: 60px;
+		}
+	}
+}

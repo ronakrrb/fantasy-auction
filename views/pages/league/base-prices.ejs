@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/base-prices.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Your are in league <%= result.league_code %></p>
+    <form action="/league/set-base-prices" method="post">
+      <% if(result.teams) { %>
+        <div><h3>Teams</h3></div>
+        <% for(var i=0; i<result.teams.length; i++) { %>
+          <div class="entities">
+            <div class="entityName"><%= result.teams[i].name %></div><div class="entityValue"><input type="number" name="entity_<%= result.teams[i].id %>" value="<%= result.teams[i].base_price %>" /></div>
+          </div>
+        <% } %>
+      <% } %>
+      <% if(result.players) { %>
+        <% for(var cat in result.players) { %>
+          <div><h3><%= cat %></h3></div>
+          <% for(var i=0; i<result.players[cat].length; i++) { %>
+            <div class="entities">
+              <div class="entityName"><%= result.players[cat][i].name %></div><div class="entityValue"><input type="number" name="entity_<%= result.players[cat][i].id %>" value="<%= result.players[cat][i].base_price %>" /></div>
+            </div>
+          <% } %>
+        <% } %>
+      <% } %>
+      <br />
+      <input type="submit" name="Submit">
+    </form>
+    <script>console.log(<%- JSON.stringify(result) %>)</script>
+  </body>
+</html>

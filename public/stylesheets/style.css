@@ -1,0 +1,27 @@
+body {
+  position: relative;
+  font: 14px/18px Helvetica, Arial, sans-serif;
+  width: 360px;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+a {
+  color: #00B7FF;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+}
+form div {
+  flex: 50%;
+  margin-bottom: 12px;
+}
+form input[type=submit] {
+  cursor: pointer;
+}
+form button {
+  cursor: pointer;
+}

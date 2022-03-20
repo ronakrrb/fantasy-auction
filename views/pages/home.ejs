@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %> <%= user %></p>
+    <% if (is_active) { %>
+      <h3>Create your league</h3>
+      <form action="/league/create" method="post">
+        League Amount:&nbsp;
+        <input type="number" name="amount" />&nbsp;
+        <input type="submit" name="Submit" />
+      </form>
+      <h3>Join a league</h3>
+      <form action="/league/join" method="post">
+        League code&nbsp;
+        <input type="text" name="code" />&nbsp;
+        <input type="submit" name="Submit" />&nbsp;
+      </form>
+    <% } else { %>
+      <!-- Write an email to -->
+    <% } %>
+  </body>
+</html>

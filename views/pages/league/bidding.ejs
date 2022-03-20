@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/bidding.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Your are in league <%= result.league_code %></p>
+    <div class="container">
+        <!-- <% if (result.is_admin && !result.bidding_details) { %>
+        <button type="button" id="start_auction">Start Auction</button>
+      <% } %> -->
+      <div class="biddingEntity">
+        <% if (result.is_admin) { %>
+          <% if (result.teams.length) { %>
+            <button type="button" id="fetch_team" class="fetch_entity <%= result.teams.length > 0 ? '' : 'hideButton' %>">Fetch Team</button>
+          <% } %>
+          <% if (result.players.length) { %>
+            <button type="button" id="fetch_player" class="fetch_entity <%= result.teams.length > 0 ? 'hideButton' : '' %>">Fetch Player</button>
+          <% } %>
+        <% } %>
+        <% if (result.is_admin) { %>
+          <button type="button" id="sell" class="sell_unsold <%= !result.bidding_details || result.bidding_details.bid_status !== 'InProgress' || !result.bidding_details.user ? 'hideButton' : '' %>">Sell</button>
+          <button type="button" id="unsold" class="sell_unsold <%= !result.bidding_details || result.bidding_details.bid_status !== 'InProgress' || result.bidding_details.user ? 'hideButton' : '' %>">Unsold</button>
+        <% } %>
+        <div class="entityProfile">
+          <div class="entityName"></div>
+          <div class="entityBasePrice"></div>
+        </div>
+        <div class="bidAmount"></div>
+        <div class="entityCurrentBid">
+          <div class="bidder"></div>
+          <div class="bidStatus"></div>
+        </div>
+      </div>
+      <div class="purseDetails">
+        <div class="actualPurse">
+          <span>Actual Purse: </span><span class="amount"><%= result.remaining_purse %></span>
+        </div>
+        <div class="livePurse">
+          <span>Live Purse: </span><span class="amount"><%= result.remaining_purse %></span>
+        </div>
+      </div>
+      <button type="button" id="bid" class="<%= !result.bidding_details || result.bidding_details.bid_status !== 'InProgress' || result.bidding_details.user === result.user_email || (result.is_team_purchased && result.teams.length > 0) ? 'hideButton' : '' %>">Bid</button>
+    </div>
+    <%- include('../partials/_bottom-menu') %>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/javascripts/bidding.js"></script>
+    <script>
+      FantasyAuction.initBidding(<%- JSON.stringify(result) %>);
+      document.querySelector('.container').style.height = (window.innerHeight - 256) + "px";
+    </script>
+  </body>
+</html>
