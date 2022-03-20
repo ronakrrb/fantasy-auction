@@ -33,6 +33,7 @@ var initSocket = (io, config) => {
         con.connect((err, result) => {
           if (err) {
             console.log(err);
+            con.end();
             return reject(err);
           } else {
             return resolve(result);
@@ -46,6 +47,7 @@ var initSocket = (io, config) => {
         con.query(sql, (err, result) => {
           if (err) {
             console.log(err);
+            con.end();
             return reject(err);
           } else {
             // if (result[0]) {
@@ -65,6 +67,7 @@ var initSocket = (io, config) => {
           con.query(sql, (err, result) => {
             if (err) {
               console.log(err);
+              con.end();
               return reject(err);
             } else {
               return resolve(result);
@@ -77,6 +80,7 @@ var initSocket = (io, config) => {
           con.query(sql, (err, result) => {
             if (err) {
               console.log(err);
+              con.end();
               return reject(err);
             } else {
               return resolve(result);
@@ -90,9 +94,11 @@ var initSocket = (io, config) => {
       Promise.all(promises)
         .then(values => {
           socket.to(config.league_code).emit('bid-broadcast', data);
+          con.end();
         })
         .catch(err => {
           console.log(err);
+          con.end();
         });
       });
     });
