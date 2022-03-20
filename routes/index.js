@@ -109,6 +109,14 @@ router.get('/home', (req, res, next) => {
   }
 });
 
+router.get('/create-league', (req, res, next) => {
+  if (req.cookies.user_email) {
+    res.render('pages/create-league', { title: 'Fantasy Auction', user: req.cookies.nick_name, is_active: req.app.get('is_user_active')});
+  } else {
+    res.redirect('/');
+  }
+});
+
 router.get('/ping', (req, res, next) => {
   res.send({
     'result': "pong"
