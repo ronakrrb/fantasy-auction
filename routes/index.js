@@ -6,7 +6,7 @@ var express = require('express'),
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('pages/index', { title: 'Fantasy Auction' });
+  res.render('pages/index', { title: 'Fantasy Auction', action: req.app.get('signup_message')});
 });
 
 router.post('/signup', function(req, res, next) {
@@ -31,9 +31,8 @@ router.post('/signup', function(req, res, next) {
           var sql = `insert into users (nick_name, email, password) values('${nick}', '${email}', '${hash}')`;
           con.query(sql, function (err1, result) {
             if (!err1) {
-              res.cookie('user_email', email);
-              res.cookie('nick_name', nick);
-              res.redirect('/home');
+              req.app.set('signup_message', "Your signup is successful. Please login after your account is active.");
+              res.redirect('/');
             } else {
               console.log(err1);
               res.send({
