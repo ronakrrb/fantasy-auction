@@ -18,6 +18,7 @@ router.get('/', (req, res, next) => {
     con.connect((err, result) => {
       if (err) {
         console.log(err);
+        con.end()
         return reject(err);
       } else {
         return resolve(result);
@@ -30,6 +31,7 @@ router.get('/', (req, res, next) => {
     con.query(sql, (err, result) => {
       if (err) {
         console.log(err);
+        con.end()
         reject(err);
       } else {
         if (result[0]) {
@@ -46,6 +48,7 @@ router.get('/', (req, res, next) => {
     con.query(sql, (err, result) => {
       if (err) {
         console.log(err);
+        con.end()
         reject(err);
       } else {
         if (result[0]) {
@@ -73,6 +76,7 @@ router.get('/', (req, res, next) => {
     var sql = `select lc.name, lc.value from league_configurations as lc INNER JOIN leagues as l ON lc.league_id=l.id where l.code='${req.cookies.league_code}';`;
     con.query(sql, (err, result) => {
       if (err) {
+        con.end()
         return reject(err);
       } else {
         let leagueConfig = {}
@@ -88,6 +92,7 @@ router.get('/', (req, res, next) => {
     var sql = `select lsebp.id, lsebp.base_price, t.name from league_specific_entity_base_prices as lsebp INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN teams as t ON ebp.entity_id=t.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and ebp.entity_type='teams' and lsebp.id NOT IN (select entity_id from bidding_details);`;
     con.query(sql, (err, result) => {
       if (err) {
+        con.end()
         return reject(err);
       } else {
         return resolve(result);
@@ -99,6 +104,7 @@ router.get('/', (req, res, next) => {
     var sql = `select lsebp.id, lsebp.base_price, p.name, p.category from league_specific_entity_base_prices as lsebp INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN players as p ON ebp.entity_id=p.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and ebp.entity_type='players' and lsebp.id NOT IN (select entity_id from bidding_details);`;
     con.query(sql, (err, result) => {
       if (err) {
+        con.end()
         return reject(err);
       } else {
         // let players = {};
@@ -115,7 +121,8 @@ router.get('/', (req, res, next) => {
     con.query(sql, (err, result) => {
       if (err) {
         console.log(err);
-        reject(err);
+        con.end()
+        return reject(err);
       } else {
         if (result[0]) {
           return resolve(result);
@@ -130,6 +137,7 @@ router.get('/', (req, res, next) => {
     var sql = `select t.name, bd.bid_amount from bidding_details as bd INNER JOIN league_specific_entity_base_prices as lsebp ON bd.entity_id=lsebp.id INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN teams as t ON ebp.entity_id=t.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and bd.user='${req.cookies.user_email}' and bd.bid_status='Sold' and ebp.entity_type='teams';`;
     con.query(sql, (err, result) => {
       if (err) {
+        con.end()
         return reject(err);
       } else {
         return resolve(result);
@@ -141,6 +149,7 @@ router.get('/', (req, res, next) => {
     var sql = `select amount/10 as amount from leagues where code='${req.cookies.league_code}';`;
     con.query(sql, (err, result) => {
       if (err) {
+        con.end()
         return reject(err);
       } else {
         return resolve(result);
@@ -152,6 +161,7 @@ router.get('/', (req, res, next) => {
     var sql = `select t.name, bd.bid_amount from bidding_details as bd INNER JOIN league_specific_entity_base_prices as lsebp ON bd.entity_id=lsebp.id INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN teams as t ON ebp.entity_id=t.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and bd.user='${req.cookies.user_email}' and bd.bid_status='Sold' and ebp.entity_type='teams';`;
     con.query(sql, (err, result) => {
       if (err) {
+        con.end()
         return reject(err);
       } else {
         return resolve(result);
@@ -163,6 +173,7 @@ router.get('/', (req, res, next) => {
     var sql = `select p.name, p.category, bd.bid_amount from bidding_details as bd INNER JOIN league_specific_entity_base_prices as lsebp ON bd.entity_id=lsebp.id INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN players as p ON ebp.entity_id=p.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and bd.user='${req.cookies.user_email}' and bd.bid_status='Sold' and ebp.entity_type='players' ORDER by p.category asc;`;
     con.query(sql, (err, result) => {
       if (err) {
+        con.end()
         return reject(err);
       } else {
         return resolve(result);
@@ -194,11 +205,13 @@ router.get('/', (req, res, next) => {
         });
       }
       let remaining = values[8][0].amount - (team_total + players_total);
-
+      con.end();
       res.render('pages/league/bidding', { title: "Welcome to the Auction", result: {league_code: req.cookies.league_code, is_admin: is_admin, league_config: values[3], teams: values[4], players: values[5], bidding_details: values[2], participants: participants, is_team_purchased: values[7].length, remaining_purse: remaining, user_email: req.cookies.user_email, nick_name: req.cookies.nick_name}, page: "bidding" });
+
     })
     .catch(err => {
       console.log(err);
+      con.end();
       res.render('pages/home', { title: 'Fantasy Auction', result: err });
     });
 });
@@ -291,6 +304,7 @@ router.get('/my-team', (req, res, next) => {
   var c1 = new Promise((resolve, reject) => {
     con.connect((err, result) => {
       if (err) {
+        con.end();
         return reject(err);
       } else {
         return resolve(result);
@@ -302,6 +316,7 @@ router.get('/my-team', (req, res, next) => {
     var sql = `select amount/10 as amount from leagues where code='${req.cookies.league_code}';`;
     con.query(sql, (err, result) => {
       if (err) {
+        con.end();
         return reject(err);
       } else {
         return resolve(result);
@@ -313,6 +328,7 @@ router.get('/my-team', (req, res, next) => {
     var sql = `select t.name, bd.bid_amount from bidding_details as bd INNER JOIN league_specific_entity_base_prices as lsebp ON bd.entity_id=lsebp.id INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN teams as t ON ebp.entity_id=t.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and bd.user='${req.cookies.user_email}' and bd.bid_status='Sold' and ebp.entity_type='teams';`;
     con.query(sql, (err, result) => {
       if (err) {
+        con.end();
         return reject(err);
       } else {
         return resolve(result);
@@ -324,6 +340,7 @@ router.get('/my-team', (req, res, next) => {
     var sql = `select p.name, p.category, bd.bid_amount from bidding_details as bd INNER JOIN league_specific_entity_base_prices as lsebp ON bd.entity_id=lsebp.id INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN players as p ON ebp.entity_id=p.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and bd.user='${req.cookies.user_email}' and bd.bid_status='Sold' and ebp.entity_type='players' ORDER by p.category asc;`;
     con.query(sql, (err, result) => {
       if (err) {
+        con.end();
         return reject(err);
       } else {
         return resolve(result);
@@ -343,10 +360,12 @@ router.get('/my-team', (req, res, next) => {
         });
       }
       let remaining = values[1][0].amount - (team_total + players_total);
+      con.end();
       res.render('pages/league/my-team', { title: "My Team", result: {league_code: req.cookies.league_code, team: values[2][0], players: values[3], remaining_purse: remaining, user_email: req.cookies.user_email}, page: "my_team" });
     })
     .catch(err => {
       console.log(err);
+      con.end();
       res.render('pages/league/my-team', { title: "Please try again", page: "my_team" });
     });
 
@@ -364,6 +383,7 @@ router.get('/competitors', (req, res, next) => {
   var c1 = new Promise((resolve, reject) => {
     con.connect((err, result) => {
       if (err) {
+        con.end();
         return reject(err);
       } else {
         return resolve(result);
@@ -375,6 +395,7 @@ router.get('/competitors', (req, res, next) => {
     var sql = `select amount/10 as amount from leagues where code='${req.cookies.league_code}';`;
     con.query(sql, (err, result) => {
       if (err) {
+        con.end();
         return reject(err);
       } else {
         return resolve(result);
@@ -386,6 +407,7 @@ router.get('/competitors', (req, res, next) => {
     var sql = `select bd.user, u.nick_name, t.name, bd.bid_amount from bidding_details as bd INNER JOIN users as u ON bd.user=u.email INNER JOIN league_specific_entity_base_prices as lsebp ON bd.entity_id=lsebp.id INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN teams as t ON ebp.entity_id=t.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and bd.bid_status='Sold' and ebp.entity_type='teams';`;
     con.query(sql, (err, result) => {
       if (err) {
+        con.end();
         return reject(err);
       } else {
         return resolve(result);
@@ -397,6 +419,7 @@ router.get('/competitors', (req, res, next) => {
     var sql = `select bd.user, u.nick_name, p.name, p.category, bd.bid_amount from bidding_details as bd INNER JOIN users as u ON bd.user=u.email INNER JOIN league_specific_entity_base_prices as lsebp ON bd.entity_id=lsebp.id INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN players as p ON ebp.entity_id=p.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and bd.bid_status='Sold' and ebp.entity_type='players' ORDER by p.category asc;`;
     con.query(sql, (err, result) => {
       if (err) {
+        con.end();
         return reject(err);
       } else {
         return resolve(result);
@@ -430,10 +453,12 @@ router.get('/competitors', (req, res, next) => {
           }
         });
       }
+      con.end();
       res.render('pages/league/competitors', { title: "Competitors", result: {league_code: req.cookies.league_code, competitors: competitors, user_email: req.cookies.user_email}, page: "competitors" });
     })
     .catch(err => {
       console.log(err);
+      con.end();
       res.render('pages/league/competitors', { title: "Please try again", page: "competitors" });
     });
 });
@@ -452,6 +477,7 @@ router.get('/auction-pool', (req, res, next) => {
     con.connect((err, result) => {
       if (err) {
         console.log(err);
+        con.end();
         return reject(err);
       } else {
         return resolve(result);
@@ -463,6 +489,7 @@ router.get('/auction-pool', (req, res, next) => {
     var sql = `select t.name, lsebp.base_price, bd.bid_status, bd.bid_amount from league_specific_entity_base_prices as lsebp INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN teams as t ON ebp.entity_id=t.id INNER JOIN leagues as l ON lsebp.league_id=l.id LEFT JOIN bidding_details as bd ON bd.entity_id=lsebp.id and (bd.bid_status='Sold' or (bd.bid_status='UnSold' and lsebp.is_sold=0)) where l.code='${req.cookies.league_code}' and ebp.entity_type='teams';`;
     con.query(sql, (err, result) => {
       if (err) {
+        con.end();
         return reject(err);
       } else {
         return resolve(result);
@@ -474,6 +501,7 @@ router.get('/auction-pool', (req, res, next) => {
     var sql = `select p.name, lsebp.base_price, bd.bid_status, bd.bid_amount from league_specific_entity_base_prices as lsebp INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN players as p ON ebp.entity_id=p.id INNER JOIN leagues as l ON lsebp.league_id=l.id LEFT JOIN bidding_details as bd ON bd.entity_id=lsebp.id AND (bd.bid_status='Sold' or (bd.bid_status='UnSold' and lsebp.is_sold=0)) where l.code='${req.cookies.league_code}' and ebp.entity_type='players';`;
     con.query(sql, (err, result) => {
       if (err) {
+        con.end();
         return reject(err);
       } else {
         return resolve(result);
@@ -483,10 +511,12 @@ router.get('/auction-pool', (req, res, next) => {
 
   Promise.all([c1, q1, q2])
     .then(values => {
+      con.end();
       res.render('pages/league/auction-pool', { title: "Auction Pool", result: {league_code: req.cookies.league_code, teams: values[1], players: values[2], user_email: req.cookies.user_email}, page: "auction_pool" });
     })
     .catch(err => {
       console.log(err);
+      con.end();
       res.render('pages/league/auction-pool', { title: "Please try again", page: "auction_pool" });
     });
 });
