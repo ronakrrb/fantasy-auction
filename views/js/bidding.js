@@ -9,8 +9,7 @@ export function initBidding(result) {
     leagueConfig = result.league_config,
     currentBid = null,
     currentBidder = null,
-    unsoldTeamsAuction = false ,
-    unsoldPlayersAuction = false,
+    unsoldTeamsAuction = true,
     fetch_team_button =  document.getElementById('fetch_team'),
     fetch_player_button = document.getElementById('fetch_player'),
     bid_button = document.getElementById('bid'),
@@ -20,12 +19,11 @@ export function initBidding(result) {
     remaining_purse = result.remaining_purse,
     live_purse = result.remaining_purse;
 
-  console.log(socket);
 
   const showLiveBidding = () => {
     let details = result.bidding_details;
     if (details) {
-      currentEntity = {id: details.entity_id, name: details.name, base_price: details.base_price};
+      currentEntity = {id: details.entity_id, name: details.name, base_price: details.base_price, entity_type: details.tptype};
       updateEntity(currentEntity);
       currentBid = details.bid_amount;
       currentBidder = details.user;
@@ -70,36 +68,27 @@ export function initBidding(result) {
   }
 
   const pickAPlayer = () => {
-    console.log(pendingPlayers, pendingPlayers.length);
     if (pendingPlayers.length) {
       currentEntityIndex = Math.floor((Math.random() * pendingPlayers.length));
       currentEntity = pendingPlayers[currentEntityIndex];
       pendingPlayers.splice(currentEntityIndex, 1);
     } else {
-      if (!unsoldPlayersAuction) {
-        const entities = new Promise((resolve, reject) => {
-          fetch('/bidding/fetch-unsold-players')
-            .then(response => response.json())
-            .then((result) => {
-              return resolve(result);
-            });
-        });
+      const entities = new Promise((resolve, reject) => {
+        fetch('/bidding/fetch-unsold-players')
+          .then(response => response.json())
+          .then((result) => {
+            return resolve(result);
+          });
+      });
 
-        Promise.all([entities])
-          .then(values => {
-            pendingPlayers = values[0].players;
-            unsoldPlayersAuction = true;
-            pickAPlayer();
-          })
-          .catch(err => {
-            console.log(err);
-          })
-      } else {
-        fetch_player_button ? fetch_player_button.classList.add('hideButton') : null;
-      }
-    }
-     if (unsoldPlayersAuction && !pendingPlayers.length) {
-      fetch_player_button ? fetch_player_button.classList.add('hideButton') : null;
+      Promise.all([entities])
+        .then(values => {
+          pendingPlayers = values[0].players;
+          pickAPlayer();
+        })
+        .catch(err => {
+          console.log(err);
+        })
     }
     forwardEntity();
   }
@@ -142,11 +131,15 @@ export function initBidding(result) {
     currentBidder = bidder;
 
     if (status === "Sold" || status === "UnSold") {
-      console.log(status, pendingTeams.length, pendingPlayers.length)
-      if (pendingTeams.length) {
-        fetch_team_button ? fetch_team_button.classList.remove('hideButton') : null;
-      } else if (pendingPlayers.length) {
-        console.log(fetch_player_button);
+      console.log(status, pendingTeams.length, pendingPlayers.length, currentEntity);
+      if (status === "UnSold") {
+        if (!currentEntity.category && currentEntity.entity_type !== "players") {
+          unsoldTeamsAuction = false;
+        }
+      }
+      if (pendingTeams.length || !unsoldTeamsAuction) { //  test all teams sold at once
+        fetch_team_button ? fetch_team_button.classList.remove('hideButton') : "";
+      } else {
         fetch_player_button ? fetch_player_button.classList.remove('hideButton') : null;
       }
       bid_button ? bid_button.classList.add('hideButton') : null;
@@ -202,13 +195,11 @@ export function initBidding(result) {
   }
 
   const sold = () => {
-    console.log(currentBid, leagueConfig.bid_increments);
     updateBid(currentBid, "Sold", currentBidder);
     socket.emit('bid-push', {bid: currentBid, bidder: currentBidder, entity_id: currentEntity.id, status: 'Sold'});
   }
 
   const unsold = () => {
-    console.log(currentBid, leagueConfig.bid_increments);
     updateBid(null, "UnSold");
     socket.emit('bid-push', {bid: null, bidder: null, entity_id: currentEntity.id, status: 'UnSold'});
   }
