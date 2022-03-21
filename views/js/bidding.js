@@ -105,7 +105,7 @@ export function initBidding(result) {
     currentEntity = current_entity;
     document.getElementsByClassName('entityName')[0].innerHTML = currentEntity.name;
     document.getElementsByClassName('entityBasePrice')[0].innerHTML = "Base: " + currentEntity.base_price;
-    if (remaining_purse < currentEntity.base_price) {
+    if (remaining_purse < currentEntity.base_price || (is_team_purchased > 0 && pendingTeams.length)) {
       bid_button ? bid_button.classList.add('hideButton') : null;
     } else {
       bid_button ? bid_button.classList.remove('hideButton') : null;
@@ -165,6 +165,7 @@ export function initBidding(result) {
     // Update Live Purse
     if (status === "Sold") {
       if (currentBidder === user) {
+        is_team_purchased = 1;
         remaining_purse = live_purse;
         document.querySelector('.actualPurse .amount').innerHTML = remaining_purse;
       } else {
