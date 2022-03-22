@@ -9,7 +9,7 @@
   <body>
     <h1><%= title %></h1>
     <% if(result) { %>
-      <p>Your are in league <%= result.league_code %></p>
+      <p>You are in league <%= result.league_code %></p>
       <div class="competitorsPurse">
         <% Object.keys(result.competitors).forEach(function (key) { %>
           <div class="item" data-name="<%= key %>">

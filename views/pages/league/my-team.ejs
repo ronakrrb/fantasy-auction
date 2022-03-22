@@ -9,7 +9,7 @@
   <body>
     <h1><%= title %></h1>
     <% if(result) { %>
-      <p>Your are in league <%= result.league_code %></p>
+      <p>You are in league <%= result.league_code %></p>
       <h2 class="remainingPurse">Remaining in your purse is <%= result.remaining_purse %></h2>
       <div class="biddingEntity">
         <% if(result.team && result.team.name) { %>

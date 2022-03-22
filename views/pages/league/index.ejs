@@ -7,7 +7,7 @@
   </head>
   <body>
     <h1><%= title %></h1>
-    <p>Your are in league <%= result.league_code %></p>
+    <p>You are in league <%= result.league_code %></p>
     <% if(result.tournaments) { %>
       <form action="/league/choose-tournament" method="post">
         Select the tournament
