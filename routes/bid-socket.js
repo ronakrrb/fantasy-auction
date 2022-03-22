@@ -1,6 +1,4 @@
-var db = require('./utils/db.js');
-
-var initSocket = (io, config) => {
+var initSocket = (io, pool, config) => {
   io.on('connection', (socket) => {
     socket.on('disconnect', () => {
       socket.leave(config.league_code);
@@ -25,83 +23,72 @@ var initSocket = (io, config) => {
 
     socket.on('bid-push', (data) => {
       console.log('Bid Push --> ', data);
+      socket.to(config.league_code).emit('bid-broadcast', data);
 
-      let db_instance = new db(),
-        con = db_instance.con;
-
-      var c1 = new Promise((resolve, reject) => {
-        con.connect((err, result) => {
-          if (err) {
-            console.log(err);
-            con.end();
-            return reject(err);
-          } else {
-            return resolve(result);
-          }
-        });
-      });
-
-      var q1 = new Promise((resolve, reject) => {
-        let bidder = data.bidder ? `'${data.bidder}'` : data.bidder;
-        var sql = `insert into bidding_details (user, entity_id, bid_amount, bid_status, created_at) values (${bidder}, ${data.entity_id}, ${data.bid}, '${data.status}', '${new Date()}')`;
-        con.query(sql, (err, result) => {
-          if (err) {
-            console.log(err);
-            con.end();
-            return reject(err);
-          } else {
-            // if (result[0]) {
-            return resolve(result);
-            // } else {
-            //   return reject("Unable to Insert")
-            // }
-          }
-        });
-      });
-
-      var promises = [c1, q1];
-
-      if (data.status === 'Sold') {
-        var q2 = new Promise((resolve, reject) => {
-          var sql = `update league_specific_entity_base_prices set is_sold=1 where id=${data.entity_id}`;
-          con.query(sql, (err, result) => {
-            if (err) {
-              console.log(err);
-              con.end();
-              return reject(err);
-            } else {
-              return resolve(result);
-            }
+      pool.getConnection(function(err1, connection) {
+        if (!err1) {
+          var q1 = new Promise((resolve, reject) => {
+            let bidder = data.bidder ? `'${data.bidder}'` : data.bidder;
+            var sql = `insert into bidding_details (user, entity_id, bid_amount, bid_status, created_at) values (${bidder}, ${data.entity_id}, ${data.bid}, '${data.status}', '${new Date()}')`;
+            connection.query(sql, (err, result) => {
+              if (err) {
+                console.log(err);
+                return reject(err);
+              } else {
+                // if (result[0]) {
+                return resolve(result);
+                // } else {
+                //   return reject("Unable to Insert")
+                // }
+              }
+            });
           });
-        });
 
-        var q3 = new Promise((resolve, reject) => {
-          var sql = `insert into user_teams (user, entity_id) values ('${data.bidder}', ${data.entity_id})`;
-          con.query(sql, (err, result) => {
-            if (err) {
+          var promises = [q1];
+
+          if (data.status === 'Sold') {
+            var q2 = new Promise((resolve, reject) => {
+              var sql = `update league_specific_entity_base_prices set is_sold=1 where id=${data.entity_id}`;
+              connection.query(sql, (err, result) => {
+                if (err) {
+                  console.log(err);
+                  return reject(err);
+                } else {
+                  return resolve(result);
+                }
+              });
+            });
+
+            var q3 = new Promise((resolve, reject) => {
+              var sql = `insert into user_teams (user, entity_id) values ('${data.bidder}', ${data.entity_id})`;
+              connection.query(sql, (err, result) => {
+                if (err) {
+                  console.log(err);
+                  return reject(err);
+                } else {
+                  return resolve(result);
+                }
+              });
+            });
+
+            promises.push(q2, q3);
+          }
+
+          Promise.all(promises)
+            .then(values => {
+              connection.release();
+            })
+            .catch(err => {
               console.log(err);
-              con.end();
-              return reject(err);
-            } else {
-              return resolve(result);
-            }
-          });
-        });
-
-        promises.push(q2, q3);
-      }
-
-      Promise.all(promises)
-        .then(values => {
-          socket.to(config.league_code).emit('bid-broadcast', data);
-          con.end();
-        })
-        .catch(err => {
-          console.log(err);
-          con.end();
-        });
+              connection.release();
+            });
+        } else {
+          connection.release();
+          res.send({'status': 'error', 'result': err1});
+        }
       });
     });
-  }
+  });
+}
 
 module.exports = initSocket;

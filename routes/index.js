@@ -1,8 +1,6 @@
 var express = require('express'),
   router = express.Router(),
-  bcrypt = require('bcrypt'),
-  db = require('./utils/db.js');
-
+  bcrypt = require('bcrypt');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -10,92 +8,69 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/signup', function(req, res, next) {
-  let db_instance = new db(),
-    con = db_instance.con,
-    nick = req.body.nick_name,
+  let nick = req.body.nick_name,
     email = req.body.email,
-    password = req.body.password;
+    password = req.body.password,
+    pool = req.app.get('db_pool');
 
-  con.connect(function(err) {
-    if (err) {
-      console.log(err);
-      res.send({
-          'status': 'error',
-          'result': err,
-          'summary': 'Connection Error'
-      });
-    } else {
-      console.log("Connected!");
-      bcrypt.hash(password, 10, function(err, hash) {
-        if (!err) {
+  bcrypt.hash(password, 10, function(err2, hash) {
+    if (!err2) {
+      pool.getConnection(function(err1, connection) {
+        if (!err1) {
           var sql = `insert into users (nick_name, email, password) values('${nick}', '${email}', '${hash}')`;
-          con.query(sql, function (err1, result) {
-            if (!err1) {
+          connection.query(sql, (err) => {
+            if (!err) {
               req.app.set('signup_message', "Your signup is successful. Please login after your account is active.");
+              connection.release();
               res.redirect('/');
             } else {
-              console.log(err1);
-              res.send({
-                'status': 'error',
-                'result': err1,
-                'summary': 'Query Error'
-              });
+              console.log(err);
+              connection.release();
+              res.send({'status': 'error', 'result': err, 'summary': 'Query Error'});
             }
           });
         } else {
-          res.send({
-            'status': 'error',
-            'result': err,
-            'summary': 'Unable to encrypt password'
-          });
+          connection.release();
+          res.send({'status': 'error', 'result': err1});
         }
       });
+    } else {
+      res.send({'status': 'error', 'result': err1, 'summary': 'Unable to encrypt password'});
     }
   });
 });
 
 router.post('/login', function(req, res, next) {
-  let db_instance = new db(),
-    con = db_instance.con,
-    email = req.body.email,
-    password = req.body.password;
+  let email = req.body.email,
+    password = req.body.password,
+    pool = req.app.get('db_pool');
 
-  con.connect(function(err) {
-    if (err) {
-      console.log(err);
-      res.send({
-          'status': 'error',
-          'result': err,
-          'summary': 'Connection Error'
-      });
-    } else {
-      console.log("Connected!");
+  pool.getConnection(function(err1, connection) {
+    if (!err1) {
       var sql = `select * from users where email='${email}'`;
-      con.query(sql, function (err, result) {
+      connection.query(sql, (err, result) => {
         if (!err) {
-          bcrypt.compare(password, result[0].password, function(err, result1) {
+          bcrypt.compare(password, result[0].password, function(err1, result1) {
             if (result1) {
               res.cookie('user_email', email);
               res.cookie('nick_name', result[0].nick_name);
               req.app.set('is_user_active', result[0].is_active);
+              connection.release();
               res.redirect('/home');
             } else {
-              res.send({
-                'status': 'error',
-                'result': 'Unable to Login',
-                'summary': 'Incorrect Password'
-              });
+              connection.release();
+              res.send({'status': 'error', 'result': 'Unable to Login', 'summary': 'Incorrect Password'});
             }
           });
         } else {
           console.log(err);
-          res.send({
-            'status': 'error',
-            'result': err,
-            'summary': 'Query Error'
-          });
+          connection.release();
+          res.send({'status': 'error', 'result': err, 'summary': 'Query Error'});
         }
       });
+    } else {
+      connection.release();
+      res.send({'status': 'error', 'result': err1});
     }
   });
 });

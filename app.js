@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var db = require('./routes/utils/db.js');
 
 var indexRouter = require('./routes/index');
 var leagueRouter = require('./routes/league');
@@ -25,6 +26,10 @@ app.use('/', indexRouter);
 app.use('/league', leagueRouter);
 app.use('/bidding', biddingRouter);
 app.use('/users', usersRouter);
+
+var db_instance = new db();
+pool = db_instance.pool;
+app.set('db_pool', pool);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
