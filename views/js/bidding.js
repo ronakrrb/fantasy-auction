@@ -83,8 +83,10 @@ export function initBidding(result) {
 
       Promise.all([entities])
         .then(values => {
-          pendingPlayers = values[0].players;
-          pickAPlayer();
+          if (values[0].players.length) {
+            pendingPlayers = values[0].players;
+            pickAPlayer();
+          }
         })
         .catch(err => {
           console.log(err);

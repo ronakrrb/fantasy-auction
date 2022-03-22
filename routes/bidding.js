@@ -171,7 +171,7 @@ router.get('/', (req, res, next) => {
       });
 
       var q12 = new Promise((resolve, reject) => {
-        var sql = `select lsebp.id, lsebp.base_price, p.name, p.category from league_specific_entity_base_prices as lsebp INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN players as p ON ebp.entity_id=p.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and ebp.entity_type='players' and lsebp.is_sold=0;`;
+        var sql = `select DISTINCT lsebp.entity_id, lsebp.id, lsebp.base_price, p.name, p.category from league_specific_entity_base_prices as lsebp INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN players as p ON ebp.entity_id=p.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and ebp.entity_type='players' and lsebp.is_sold=0;`;
         connection.query(sql, (err, result) => {
           if (err) {
             return reject(err);
@@ -247,7 +247,7 @@ router.get('/fetch-unsold-players', (req, res, next) => {
 
   pool.getConnection(function(err1, connection) {
     if (!err1) {
-      var sql = `select lsebp.id, lsebp.base_price, p.name, p.category from league_specific_entity_base_prices as lsebp INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN players as p ON ebp.entity_id=p.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and ebp.entity_type='players' and lsebp.is_sold=0;`;
+      var sql = `select DISTINCT lsebp.entity_id, lsebp.id, lsebp.base_price, p.name, p.category from league_specific_entity_base_prices as lsebp INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN players as p ON ebp.entity_id=p.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and ebp.entity_type='players' and lsebp.is_sold=0;`;
       connection.query(sql, (err, result) => {
         if (err) {
           connection.release();
@@ -446,7 +446,7 @@ router.get('/auction-pool', (req, res, next) => {
       });
 
       var q2 = new Promise((resolve, reject) => {
-        var sql = `select p.name, lsebp.base_price, bd.bid_status, bd.bid_amount from league_specific_entity_base_prices as lsebp INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN players as p ON ebp.entity_id=p.id INNER JOIN leagues as l ON lsebp.league_id=l.id LEFT JOIN bidding_details as bd ON bd.entity_id=lsebp.id AND (bd.bid_status='Sold' or (bd.bid_status='UnSold' and lsebp.is_sold=0)) where l.code='${req.cookies.league_code}' and ebp.entity_type='players';`;
+        var sql = `select DISTINCT lsebp.entity_id, p.name, lsebp.base_price, bd.bid_status, bd.bid_amount from league_specific_entity_base_prices as lsebp INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN players as p ON ebp.entity_id=p.id INNER JOIN leagues as l ON lsebp.league_id=l.id LEFT JOIN bidding_details as bd ON bd.entity_id=lsebp.id AND (bd.bid_status='Sold' or (bd.bid_status='UnSold' and lsebp.is_sold=0)) where l.code='${req.cookies.league_code}' and ebp.entity_type='players';`;
         connection.query(sql, (err, result) => {
           if (err) {
             return reject(err);
