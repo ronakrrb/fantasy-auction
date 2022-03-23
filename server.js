@@ -24,30 +24,36 @@ app.set('port', port);
 var server = http.createServer(app);
 
 var initSocket = () => {
+  joinedUsers = {};
   io.on('connection', (socket) => {
-    let league_code = "";
+    let league_code = "", user_email = "";
     console.log("user connected ++");
+
     socket.on('disconnect', () => {
-      console.log('user disconnected');
-      // let is_online = {};
-      // is_online[config.user_email] = false;
-      // socket.to(config.league_code).emit('isOnline-broadcast', is_online);
+      console.log('user disconnected', user_email);
+      joinedUsers[league_code][user_email] = false;
+      socket.to(league_code).emit('isOnline-broadcast', joinedUsers[league_code]);
       socket.leave(league_code);
     });
 
     socket.on('join-push', (data) => {
-      league_code = data;
+      league_code = data.league_code;
+      user_email = data.user_email;
+
       const rooms = socket.rooms.values();
       if(rooms.next().value === league_code) {
         return;
       }
       socket.rooms.clear();
       socket.join(league_code);
-    });
 
-    // socket.on('isOnline-push', (data) => {
-    //   socket.emit('isOnline-broadcast', data);
-    // });
+      if (!joinedUsers[league_code]) {
+        joinedUsers[league_code] = {};
+      }
+      joinedUsers[league_code][user_email] = true;
+      socket.to(league_code).emit('isOnline-broadcast', joinedUsers[league_code]);
+      console.log('join-push', user_email, joinedUsers);
+  });
 
     socket.on('fetchEntity-push', (data) => {
       console.log('Entity Push --> ', data, socket.id, data.league_code);

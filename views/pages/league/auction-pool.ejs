@@ -30,7 +30,7 @@
       <% if(result.players) { %>
         <div><h3>Players</h3></div>
         <% for(var i=0; i<result.players.length; i++) { %>
-          <div class="entities">
+          <div class="entities <%= result.players[i].bid_status==='Sold' ? 'sold' : '' %>">
             <div class="entityName"><%= result.players[i].name %></div>
             <div class="basePrice"><%= result.players[i].base_price %></div>
             <div class="bidStatus"><%= result.players[i].bid_status %></div>

@@ -72,6 +72,12 @@
   transition: all 0.3s;
   box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
 }
+.container #participants_email {
+  font-size: 10px;
+}
+.container #participants_email .offlineUser {
+  color: #cccccc;
+}
 .container .hideButton {
   display: none;
 }

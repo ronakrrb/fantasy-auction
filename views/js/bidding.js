@@ -17,12 +17,9 @@ export function initBidding(result) {
     unsold_button = document.getElementById('unsold'),
     is_team_purchased = result.is_team_purchased,
     remaining_purse = result.remaining_purse,
-    live_purse = result.remaining_purse,
-    is_online = {};
+    live_purse = result.remaining_purse;
 
-  is_online[user] = true;
-  // socket.emit('isOnline-push', is_online);
-  socket.emit('join-push', result.league_code);
+  socket.emit('join-push', {league_code: result.league_code, user_email: result.user_email});
   const showLiveBidding = () => {
     let details = result.bidding_details;
     if (details) {
@@ -226,18 +223,18 @@ export function initBidding(result) {
     socket.on('bid-broadcast', function(data) {
       updateBid(data.bid, data.status, data.bidder);
     });
-    // socket.on('isOnline-broadcast', function(data) {
-    //   console.log(data);
-    //   if (result.is_admin) {
-    //     let participants_email_div =  document.getElementById('participants_email'),
-    //       html = '<ul>';
-    //     Object.entries(data).forEach(([key, value]) => {
-    //       html += `<li class='${value ? "onlineUser" : "offlineUser"}'>${key}</li>`
-    //     });
-    //     html += '</ul>';
-    //     participants_email_div ? participants_email_div.innerHTML = html : null;
-    //   }
-    // });
+    socket.on('isOnline-broadcast', function(data) {
+      console.log(data);
+      if (result.is_admin) {
+        let participants_email_div =  document.getElementById('participants_email'),
+          html = '<ul>';
+        Object.entries(data).forEach(([key, value]) => {
+          html += `<li class='${value ? "onlineUser" : "offlineUser"}'>${key}</li>`
+        });
+        html += '</ul>';
+        participants_email_div ? participants_email_div.innerHTML = html : null;
+      }
+    });
   });
 }
 

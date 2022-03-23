@@ -44,9 +44,9 @@
           <span>Live Purse: </span><span class="amount"><%= result.remaining_purse %></span>
         </div>
       </div>
-      <!-- <% if (result.is_admin) { %>
+      <% if (result.is_admin) { %>
         <div id="participants_email"></div>
-      <% } %> -->
+      <% } %>
       <button type="button" id="bid" class="<%= !result.bidding_details || result.bidding_details.bid_status !== 'InProgress' || result.bidding_details.user === result.user_email || (result.is_team_purchased && result.teams.length > 0) ? 'hideButton' : '' %>">Bid</button>
     </div>
     <%- include('../partials/_bottom-menu') %>
