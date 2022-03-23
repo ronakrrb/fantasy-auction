@@ -44,20 +44,6 @@
   width: 49%;
   text-align: right;
 }
-.container #bid {
-  position: absolute;
-  width: 150px;
-  height: 40px;
-  left: calc(50% - 75px);
-  bottom: 0;
-  font-size: 16px;
-  color: black;
-  background-color: rgba(255, 196, 0, 0.5);
-  border-radius: 20px;
-  border: 1px solid #ffc400;
-  transition: all 0.3s;
-  box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
-}
 .container .purseDetails {
   display: flex;
   position: absolute;
@@ -71,6 +57,20 @@
 }
 .container .purseDetails .livePurse {
   text-align: right;
+}
+.container #bid {
+  position: absolute;
+  width: 150px;
+  height: 40px;
+  left: calc(50% - 75px);
+  bottom: 0;
+  font-size: 16px;
+  color: black;
+  background-color: rgba(255, 196, 0, 0.5);
+  border-radius: 20px;
+  border: 1px solid #ffc400;
+  transition: all 0.3s;
+  box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
 }
 .container .hideButton {
   display: none;

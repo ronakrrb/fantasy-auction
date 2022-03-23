@@ -31,7 +31,7 @@ var db_instance = new db();
 pool = db_instance.pool;
 app.set('db_pool', pool);
 
-require('events').EventEmitter.defaultMaxListeners = 50
+// require('events').EventEmitter.defaultMaxListeners = 50
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

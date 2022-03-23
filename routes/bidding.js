@@ -183,8 +183,6 @@ router.get('/', (req, res, next) => {
 
       Promise.all([q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12])
         .then(values => {
-          initSocket(req.app.get('io'), pool, {user_email: req.cookies.user_email, league_code: req.cookies.league_code});
-
           is_admin = false;
           if (values[0][0].created_by === req.cookies.user_email) is_admin = true;
 

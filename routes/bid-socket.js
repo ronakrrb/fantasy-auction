@@ -1,8 +1,12 @@
 var initSocket = (io, pool, config) => {
   io.on('connection', (socket) => {
+    console.log("user connected ++")
     socket.on('disconnect', () => {
-      socket.leave(config.league_code);
       console.log('user disconnected');
+      // let is_online = {};
+      // is_online[config.user_email] = false;
+      // socket.to(config.league_code).emit('isOnline-broadcast', is_online);
+      socket.leave(config.league_code);
     });
 
     const rooms = socket.rooms.values();
@@ -15,6 +19,10 @@ var initSocket = (io, pool, config) => {
     // console.log(socket.rooms);
     socket.join(config.league_code);
     // console.log(socket.rooms);
+
+    // socket.on('isOnline-push', (data) => {
+    //   socket.emit('isOnline-broadcast', data);
+    // });
 
     socket.on('fetchEntity-push', (data) => {
       console.log('Entity Push --> ', data, socket.id, config.league_code);
