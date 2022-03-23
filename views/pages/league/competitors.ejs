@@ -13,7 +13,7 @@
       <div class="competitorsPurse">
         <% Object.keys(result.competitors).forEach(function (key) { %>
           <div class="item" data-name="<%= key %>">
-            <div class="name"><%= key %></div>
+            <div class="name"><%= key %> (<%= result.competitors[key].players.length %>)</div>
             <div class="amount"><%= result.competitors[key].remaining_purse %></div>
           </div>
         <% }); %>

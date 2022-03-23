@@ -20,7 +20,7 @@
           </div>
         <% } %>
         <% if(result.players && result.players.length) { %>
-          <h4>Team Players</h4>
+          <h4>Team Players (<%= result.players.length %>)</h4>
           <% for(var i=0; i<result.players.length; i++) { %>
             <div class="teamPlayers">
               <div class="entityName"><%= result.players[i].name %></div>
