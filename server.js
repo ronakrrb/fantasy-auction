@@ -31,6 +31,9 @@ var initSocket = () => {
 
     socket.on('disconnect', () => {
       console.log('user disconnected', user_email);
+      if (!joinedUsers[league_code]) {
+        joinedUsers[league_code] = {};
+      }
       joinedUsers[league_code][user_email] = false;
       socket.to(league_code).emit('isOnline-broadcast', joinedUsers[league_code]);
       socket.leave(league_code);
