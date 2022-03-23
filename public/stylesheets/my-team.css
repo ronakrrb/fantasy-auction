@@ -1,5 +1,6 @@
 .biddingEntity {
   overflow-y: scroll;
+  margin-bottom: 72px;
 }
 .biddingEntity h4 {
   margin-top: 24px;

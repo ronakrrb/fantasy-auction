@@ -127,7 +127,7 @@ router.get('/', (req, res, next) => {
       });
 
       var q8 = new Promise((resolve, reject) => {
-        var sql = `select amount/10 as amount from leagues where code='${req.cookies.league_code}';`;
+        var sql = `select 3000 as amount from leagues where code='${req.cookies.league_code}';`;
         connection.query(sql, (err, result) => {
           if (err) {
             return reject(err);
@@ -202,6 +202,7 @@ router.get('/', (req, res, next) => {
               players_total += player.bid_amount;
             });
           }
+          console.log(values[7]);
           let remaining = values[7][0].amount - (team_total + players_total);
           connection.release();
           res.render('pages/league/bidding', { title: "Welcome to the Auction", result: {league_code: req.cookies.league_code, is_admin: is_admin, league_config: values[2], teams: values[3].length ? values[3] : values[10], players: values[4].length ? values[4] : values[11], bidding_details: values[1], participants: participants, is_team_purchased: values[6].length, remaining_purse: remaining, user_email: req.cookies.user_email, nick_name: req.cookies.nick_name}, page: "bidding" });
@@ -275,7 +276,7 @@ router.get('/my-team', (req, res, next) => {
   pool.getConnection(function(err1, connection) {
     if (!err1) {
       var q1 = new Promise((resolve, reject) => {
-        var sql = `select amount/10 as amount from leagues where code='${req.cookies.league_code}';`;
+        var sql = `select 3000 as amount from leagues where code='${req.cookies.league_code}';`;
         connection.query(sql, (err, result) => {
           if (err) {
             return reject(err);
@@ -347,7 +348,7 @@ router.get('/competitors', (req, res, next) => {
   pool.getConnection(function(err1, connection) {
     if (!err1) {
       var q1 = new Promise((resolve, reject) => {
-        var sql = `select amount/10 as amount from leagues where code='${req.cookies.league_code}';`;
+        var sql = `select 3000 as amount from leagues where code='${req.cookies.league_code}';`;
         connection.query(sql, (err, result) => {
           if (err) {
             return reject(err);

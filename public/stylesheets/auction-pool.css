@@ -1,5 +1,6 @@
 .container {
   overflow-y: scroll;
+  margin-bottom: 72px;
 }
 .container h3 {
   margin-top: 24px;

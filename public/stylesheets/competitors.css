@@ -22,6 +22,9 @@
   font-weight: 600;
 }
 
+.competitorTeam {
+  margin-bottom: 72px;
+}
 .competitorTeam .biddingEntity h4 {
   margin-top: 24px;
 }
