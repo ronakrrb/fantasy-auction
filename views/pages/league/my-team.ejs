@@ -23,7 +23,7 @@
           <h4>Team Players (<%= result.players.length %>)</h4>
           <% for(var i=0; i<result.players.length; i++) { %>
             <div class="teamPlayers">
-              <div class="entityName"><%= result.players[i].name %></div>
+              <div class="entityName"><%= result.players[i].name %> (<%= result.players[i].slug %>)</div>
               <div class="entityCategory"><%= result.players[i].category.substring(0,3) %></div>
               <div class="entityPrice"><%= result.players[i].bid_amount %></div>
             </div>
