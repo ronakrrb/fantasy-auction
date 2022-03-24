@@ -160,7 +160,7 @@ router.get('/', (req, res, next) => {
       });
 
       var q11 = new Promise((resolve, reject) => {
-        var sql = `select lsebp.id, 260 as base_price, t.name from league_specific_entity_base_prices as lsebp INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN teams as t ON ebp.entity_id=t.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and ebp.entity_type='teams' and lsebp.is_sold=0;`;
+        var sql = `select lsebp.id, ROUND(lsebp.base_price*2) as base_price, t.name from league_specific_entity_base_prices as lsebp INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN teams as t ON ebp.entity_id=t.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and ebp.entity_type='teams' and lsebp.is_sold=0;`;
         connection.query(sql, (err, result) => {
           if (err) {
             return reject(err);
@@ -224,7 +224,7 @@ router.get('/fetch-unsold-teams', (req, res, next) => {
 
   pool.getConnection(function(err1, connection) {
     if (!err1) {
-      var sql = `select lsebp.id, 260 as base_price, t.name from league_specific_entity_base_prices as lsebp INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN teams as t ON ebp.entity_id=t.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and ebp.entity_type='teams' and lsebp.is_sold=0;`;
+      var sql = `select lsebp.id, ROUND(lsebp.base_price*1.5) as base_price, t.name from league_specific_entity_base_prices as lsebp INNER JOIN entity_base_prices as ebp ON lsebp.entity_id=ebp.id INNER JOIN teams as t ON ebp.entity_id=t.id INNER JOIN leagues as l ON lsebp.league_id=l.id where l.code='${req.cookies.league_code}' and ebp.entity_type='teams' and lsebp.is_sold=0;`;
       connection.query(sql, (err, result) => {
         if (err) {
           connection.release();
