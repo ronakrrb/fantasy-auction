@@ -144,7 +144,7 @@ router.post('/choose-tournament', function(req, res, next) {
       });
 
       var q2 = new Promise((resolve, reject) => {
-        var sql = `insert into league_specific_entity_base_prices (league_id, entity_id, base_price, created_by, created_at) select l.id, ebp.id, ROUND(ebp.base_price/100*(l.amount/(select count(id) from entity_base_prices where tournament_id=l.tournament_id and entity_type='teams')),0), '${req.cookies.user_email}', '${new Date()}' from leagues as l INNER JOIN entity_base_prices as ebp ON l.tournament_id=ebp.tournament_id and l.code='${req.cookies.league_code}';`;
+        var sql = `insert into league_specific_entity_base_prices (league_id, entity_id, base_price, created_by, created_at) select l.id, ebp.id, ebp.base_price, '${req.cookies.user_email}', '${new Date()}' from leagues as l INNER JOIN entity_base_prices as ebp ON l.tournament_id=ebp.tournament_id and l.code='${req.cookies.league_code}';`;
         connection.query(sql, (err, result) => {
           if (err) {
             return reject(err);
