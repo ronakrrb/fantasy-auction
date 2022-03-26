@@ -116,7 +116,7 @@ router.get('/index/:action', (req, res, next) => {
             res.send({'status': 'error', 'result': err});
           } else {
             connection.release();
-            res.render('pages/league/index', { title: "Welcome to the Auction", result: {league_code: req.cookies.league_code, tournaments: result} });
+            res.render('pages/auction/index', { title: "Welcome to the Auction", result: {league_code: req.cookies.league_code, tournaments: result} });
           }
         });
       } else {
@@ -211,7 +211,7 @@ router.get('/base-prices', (req, res, next) => {
       Promise.all([q1, q2])
         .then(values => {
           connection.release();
-          res.render('pages/league/base-prices', { title: "Set base prices", result: {league_code: req.cookies.league_code, teams: values[0], players: values[1] } });
+          res.render('pages/auction/base-prices', { title: "Set base prices", result: {league_code: req.cookies.league_code, teams: values[0], players: values[1] } });
         })
         .catch(err => {
           console.log(err);
@@ -273,7 +273,7 @@ router.get('/configure', (req, res, next) => {
   if (!req.cookies.league_code) {
     res.redirect('/home');
   }
-  res.render('pages/league/configure', { title: "Configure the league", result: {league_code: req.cookies.league_code} });
+  res.render('pages/auction/configure', { title: "Configure the league", result: {league_code: req.cookies.league_code} });
 });
 
 router.post('/set-configurations', (req, res, next) => {

@@ -205,7 +205,7 @@ router.get('/', (req, res, next) => {
           console.log(values[7]);
           let remaining = values[7][0].amount - (team_total + players_total);
           connection.release();
-          res.render('pages/league/bidding', { title: "Welcome to the Auction", result: {league_code: req.cookies.league_code, is_admin: is_admin, league_config: values[2], teams: values[3].length ? values[3] : values[10], players: values[4].length ? values[4] : values[11], bidding_details: values[1], participants: participants, is_team_purchased: values[6].length, remaining_purse: remaining, user_email: req.cookies.user_email, nick_name: req.cookies.nick_name}, page: "bidding" });
+          res.render('pages/auction/bidding', { title: "Welcome to the Auction", result: {league_code: req.cookies.league_code, is_admin: is_admin, league_config: values[2], teams: values[3].length ? values[3] : values[10], players: values[4].length ? values[4] : values[11], bidding_details: values[1], participants: participants, is_team_purchased: values[6].length, remaining_purse: remaining, user_email: req.cookies.user_email, nick_name: req.cookies.nick_name}, page: "bidding" });
         })
         .catch(err => {
           console.log(err);
@@ -322,12 +322,12 @@ router.get('/my-team', (req, res, next) => {
           }
           let remaining = values[0][0].amount - (team_total + players_total);
           connection.release();
-          res.render('pages/league/my-team', { title: "My Team", result: {league_code: req.cookies.league_code, team: values[1][0], players: values[2], remaining_purse: remaining, user_email: req.cookies.user_email}, page: "my_team" });
+          res.render('pages/auction/my-team', { title: "My Team", result: {league_code: req.cookies.league_code, team: values[1][0], players: values[2], remaining_purse: remaining, user_email: req.cookies.user_email}, page: "my_team" });
         })
         .catch(err => {
           console.log(err);
           connection.release();
-          res.render('pages/league/my-team', { title: "Please try again", page: "my_team" });
+          res.render('pages/auction/my-team', { title: "Please try again", page: "my_team" });
         });
     } else {
       connection.release();
@@ -408,12 +408,12 @@ router.get('/competitors', (req, res, next) => {
             });
           }
           connection.release();
-          res.render('pages/league/competitors', { title: "Competitors", result: {league_code: req.cookies.league_code, competitors: competitors, user_email: req.cookies.user_email}, page: "competitors" });
+          res.render('pages/auction/competitors', { title: "Competitors", result: {league_code: req.cookies.league_code, competitors: competitors, user_email: req.cookies.user_email}, page: "competitors" });
         })
         .catch(err => {
           console.log(err);
           connection.release();
-          res.render('pages/league/competitors', { title: "Please try again", page: "competitors" });
+          res.render('pages/auction/competitors', { title: "Please try again", page: "competitors" });
         });
     } else {
       connection.release();
@@ -459,12 +459,12 @@ router.get('/auction-pool', (req, res, next) => {
       Promise.all([q1, q2])
         .then(values => {
           connection.release();
-          res.render('pages/league/auction-pool', { title: "Auction Pool", result: {league_code: req.cookies.league_code, teams: values[0], players: values[1], user_email: req.cookies.user_email}, page: "auction_pool" });
+          res.render('pages/auction/auction-pool', { title: "Auction Pool", result: {league_code: req.cookies.league_code, teams: values[0], players: values[1], user_email: req.cookies.user_email}, page: "auction_pool" });
         })
         .catch(err => {
           console.log(err);
           connection.release();
-          res.render('pages/league/auction-pool', { title: "Please try again", page: "auction_pool" });
+          res.render('pages/auction/auction-pool', { title: "Please try again", page: "auction_pool" });
         });
     } else {
       connection.release();
